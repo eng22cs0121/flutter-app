@@ -1,0 +1,45 @@
+name: meditrust_patient
+description: MediTrustChain Patient App - Verify medicine authenticity using blockchain technology.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI / Icons
+  cupertino_icons: ^1.0.8
+  google_fonts: ^6.2.1
+
+  # QR Code Scanning
+  mobile_scanner: ^5.2.3
+
+  # Blockchain (Ethereum)
+  web3dart: ^2.7.3
+  http: ^1.2.1
+  convert: ^3.1.1
+
+  # Supabase
+  supabase_flutter: ^2.5.6
+
+  # Local Storage (scan history)
+  shared_preferences: ^2.2.3
+
+  # Utilities
+  intl: ^0.19.0
+  url_launcher: ^6.3.0
+  share_plus: ^10.0.2
+  uuid: ^4.4.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/

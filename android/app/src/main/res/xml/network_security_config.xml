@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="false">
+        <!-- Allow HTTPS only for Supabase and blockchain RPC -->
+        <domain includeSubdomains="true">supabase.co</domain>
+        <domain includeSubdomains="true">alchemy.com</domain>
+        <domain includeSubdomains="true">infura.io</domain>
+        <domain includeSubdomains="true">etherscan.io</domain>
+        <domain includeSubdomains="true">polygon.technology</domain>
+        <domain includeSubdomains="true">rpc.sepolia.org</domain>
+    </domain-config>
+</network-security-config>
