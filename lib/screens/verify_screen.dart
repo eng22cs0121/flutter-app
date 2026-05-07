@@ -309,6 +309,9 @@ class _VerifyScreenState extends State<VerifyScreen>
     );
   }
 
+  // ── Camera tab ──────────────────────────────────────────────────────
+  // mobile_scanner 5.x has no 'overlay' param — use Stack to draw viewfinder.
+
   Widget _buildCameraTab(ThemeData theme) {
     if (_isScanning) {
       return Column(
@@ -316,11 +319,15 @@ class _VerifyScreenState extends State<VerifyScreen>
           Expanded(
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: MobileScanner(
-                controller: _scannerController!,
-                onDetect: _onQRDetected,
-                overlay: Center(
-                  child: Container(
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  MobileScanner(
+                    controller: _scannerController!,
+                    onDetect: _onQRDetected,
+                  ),
+                  // Viewfinder frame drawn on top via Stack
+                  Container(
                     width: 200,
                     height: 200,
                     decoration: BoxDecoration(
@@ -329,7 +336,7 @@ class _VerifyScreenState extends State<VerifyScreen>
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                ),
+                ],
               ),
             ),
           ),
@@ -340,8 +347,31 @@ class _VerifyScreenState extends State<VerifyScreen>
               onPressed: _stopScanner,
               child: const Text('Stop Scanner'),
             ),
-            style: theme.textTheme.bodyMedium
-                ?.copyWith(color: const Color(0xFF94A3B8))),
+          ),
+        ],
+      );
+    }
+
+    // Not scanning — show prompt to start camera
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: 80,
+          height: 80,
+          decoration: BoxDecoration(
+            color: theme.colorScheme.primary.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Icon(Icons.qr_code_scanner,
+              size: 40, color: theme.colorScheme.primary),
+        ),
+        const SizedBox(height: 16),
+        Text(
+          'Point your camera at the QR code',
+          style: theme.textTheme.bodyMedium
+              ?.copyWith(color: const Color(0xFF94A3B8)),
+        ),
         const SizedBox(height: 20),
         ElevatedButton.icon(
           onPressed: _isVerifying ? null : _startScanner,
@@ -351,6 +381,8 @@ class _VerifyScreenState extends State<VerifyScreen>
       ],
     );
   }
+
+  // ── Manual entry tab ─────────────────────────────────────────────────
 
   Widget _buildManualTab(ThemeData theme) {
     return Column(
@@ -394,5 +426,4 @@ class _VerifyScreenState extends State<VerifyScreen>
     );
   }
 }
-
 

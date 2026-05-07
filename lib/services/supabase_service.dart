@@ -39,7 +39,7 @@ class SupabaseService {
           .maybeSingle();
 
       if (response == null) return null;
-      return Batch.fromJson(response as Map<String, dynamic>);
+      return Batch.fromJson(response);
     } catch (_) {
       return null;
     }

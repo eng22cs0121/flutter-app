@@ -3,7 +3,6 @@ import 'dart:typed_data';
 
 import 'package:convert/convert.dart';
 import 'package:http/http.dart' as http;
-import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
 import '../config/constants.dart';
