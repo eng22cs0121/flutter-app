@@ -112,6 +112,9 @@ class _VerifyScreenState extends State<VerifyScreen>
       // Save to history
       await ScanHistoryService().saveResult(result);
 
+      // Refresh cache so newly-added batches are visible on next scan
+      _prefetchBatches();
+
       // Scroll to result
       await Future.delayed(const Duration(milliseconds: 200));
       if (_scrollController.hasClients) {

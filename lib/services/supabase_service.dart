@@ -53,7 +53,7 @@ class SupabaseService {
       final response = await _client
           .from('batch_history')
           .select('id, batch_id, location, status, timestamp, notes, latitude, longitude')
-          .eq('batch_id', batchId)
+          .eq('batch_id', batchId.toUpperCase())
           .order('timestamp', ascending: true);
 
       return (response as List)
