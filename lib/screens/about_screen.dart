@@ -68,29 +68,29 @@ class AboutScreen extends StatelessWidget {
                 style: theme.textTheme.titleMedium
                     ?.copyWith(fontWeight: FontWeight.w700)),
             const SizedBox(height: 12),
-            _HowStep(
+            const _HowStep(
               step: 1,
               icon: Icons.qr_code_scanner,
               title: 'Scan or Enter',
               description:
                   'Scan the QR code on your medicine package or manually enter the batch code.',
-              color: const Color(0xFF6366F1),
+              color: Color(0xFF6366F1),
             ),
-            _HowStep(
+            const _HowStep(
               step: 2,
               icon: Icons.link,
               title: 'Blockchain Check',
               description:
                   'The app queries the Ethereum blockchain to verify the batch\'s authenticity and integrity.',
-              color: const Color(0xFF8B5CF6),
+              color: Color(0xFF8B5CF6),
             ),
-            _HowStep(
+            const _HowStep(
               step: 3,
               icon: Icons.verified_outlined,
               title: 'Instant Result',
               description:
                   'Get an immediate GENUINE, EXPIRED, TAMPERED or RECALLED status with full batch details.',
-              color: const Color(0xFF06B6D4),
+              color: Color(0xFF06B6D4),
             ),
 
             const SizedBox(height: 24),
@@ -100,38 +100,38 @@ class AboutScreen extends StatelessWidget {
                 style: theme.textTheme.titleMedium
                     ?.copyWith(fontWeight: FontWeight.w700)),
             const SizedBox(height: 12),
-            _StatusExplanation(
+            const _StatusExplanation(
               status: 'GENUINE',
-              color: const Color(0xFF4ADE80),
+              color: Color(0xFF4ADE80),
               description:
                   'Medicine is authentic and verified on the blockchain.',
             ),
-            _StatusExplanation(
+            const _StatusExplanation(
               status: 'TAMPERED',
-              color: const Color(0xFFF87171),
+              color: Color(0xFFF87171),
               description:
                   'QR code data does not match blockchain records. Do not use!',
             ),
-            _StatusExplanation(
+            const _StatusExplanation(
               status: 'EXPIRED',
-              color: const Color(0xFFFBBF24),
+              color: Color(0xFFFBBF24),
               description: 'Medicine is past its expiry date.',
             ),
-            _StatusExplanation(
+            const _StatusExplanation(
               status: 'RECALLED',
-              color: const Color(0xFFF87171),
+              color: Color(0xFFF87171),
               description:
                   'Batch has been recalled by regulators. Do not use!',
             ),
-            _StatusExplanation(
+            const _StatusExplanation(
               status: 'NOT APPROVED',
-              color: const Color(0xFFFBBF24),
+              color: Color(0xFFFBBF24),
               description:
                   'Batch has not yet been approved by regulatory authorities.',
             ),
-            _StatusExplanation(
+            const _StatusExplanation(
               status: 'NOT FOUND',
-              color: const Color(0xFF94A3B8),
+              color: Color(0xFF94A3B8),
               description:
                   'Batch code not found. Check the code or contact your pharmacy.',
             ),
@@ -154,7 +154,7 @@ class AboutScreen extends StatelessWidget {
                               ?.copyWith(fontWeight: FontWeight.w700)),
                     ]),
                     const SizedBox(height: 12),
-                    _InfoRow(
+                    const _InfoRow(
                         label: 'Network',
                         value: AppConstants.chainName),
                     _InfoRow(

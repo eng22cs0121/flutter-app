@@ -66,6 +66,24 @@ class Batch {
   bool get isApproved =>
       ['approved', 'in-transit', 'at-pharmacy', 'sold']
           .contains(status.toLowerCase());
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'mfg': mfg,
+        'exp': exp,
+        'qty': qty,
+        'status': status,
+        'manufacturer': manufacturer,
+        'data_hash': dataHash,
+        'current_holder': currentHolder,
+        'last_location': lastLocation,
+        'is_blockchain_synced': isBlockchainSynced,
+        'composition': composition,
+        'strength': strength,
+        'created_at': createdAt,
+        'updated_at': updatedAt,
+      };
 }
 
 /// Mirrors the `batch_history` table

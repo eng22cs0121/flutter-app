@@ -24,10 +24,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Future<void> _load() async {
     setState(() => _loading = true);
     final history = await ScanHistoryService().getHistory();
-    if (mounted) setState(() {
-      _history = history;
-      _loading = false;
-    });
+    if (mounted) {
+      setState(() {
+        _history = history;
+        _loading = false;
+      });
+    }
   }
 
   Future<void> _clearHistory() async {

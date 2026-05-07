@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../config/constants.dart';
@@ -80,6 +81,7 @@ class _VerifyScreenState extends State<VerifyScreen>
     final barcode = capture.barcodes.firstOrNull;
     if (barcode?.rawValue == null) return;
 
+    HapticFeedback.mediumImpact();
     _stopScanner();
     _verify(barcode!.rawValue!);
   }
@@ -105,6 +107,7 @@ class _VerifyScreenState extends State<VerifyScreen>
       );
 
       setState(() => _result = result);
+      HapticFeedback.lightImpact();
 
       // Save to history
       await ScanHistoryService().saveResult(result);
@@ -178,44 +181,82 @@ class _VerifyScreenState extends State<VerifyScreen>
                     fontWeight: FontWeight.w800)),
           ],
         ),
-        actions: [
+        actions: const [
           // Blockchain status indicator
           Padding(
-            padding: const EdgeInsets.only(right: 16),
+            padding: EdgeInsets.only(right: 16),
             child: Chip(
-              avatar: const Icon(Icons.link, size: 14, color: Color(0xFF4ADE80)),
+              avatar: Icon(Icons.link, size: 14, color: Color(0xFF4ADE80)),
               label: Text(AppConstants.chainName,
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 11, color: Color(0xFF4ADE80))),
-              backgroundColor: const Color(0xFF052e16),
-              side: const BorderSide(color: Color(0xFF166534)),
+              backgroundColor: Color(0xFF052e16),
+              side: BorderSide(color: Color(0xFF166534)),
               padding: EdgeInsets.zero,
             ),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeroSection(theme),
-            const SizedBox(height: 20),
-            _buildScannerCard(theme),
-            if (_result != null) ...[
-              const SizedBox(height: 16),
-              VerificationResultCard(
-                result: _result!,
-                showLogs: _showLogs,
-                onToggleLogs: () =>
-                    setState(() => _showLogs = !_showLogs),
-                onVerifyAgain: _reset,
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            controller: _scrollController,
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeroSection(theme),
+                const SizedBox(height: 20),
+                _buildScannerCard(theme),
+                if (_result != null) ...[
+                  const SizedBox(height: 16),
+                  VerificationResultCard(
+                    result: _result!,
+                    showLogs: _showLogs,
+                    onToggleLogs: () =>
+                        setState(() => _showLogs = !_showLogs),
+                    onVerifyAgain: _reset,
+                  ),
+                ],
+                const SizedBox(height: 32),
+              ],
+            ),
+          ),
+          // ── Blockchain verification loading overlay ──────────────
+          if (_isVerifying)
+            Container(
+              color: const Color(0xCC0F172A),
+              child: const Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: 48,
+                      height: 48,
+                      child: CircularProgressIndicator(
+                        color: Color(0xFF6366F1),
+                        strokeWidth: 3,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      'Verifying on blockchain...',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(height: 6),
+                    Text(
+                      'Querying Ethereum Sepolia',
+                      style: TextStyle(
+                          color: Color(0xFF94A3B8), fontSize: 13),
+                    ),
+                  ],
+                ),
               ),
-            ],
-            const SizedBox(height: 32),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
@@ -326,7 +367,7 @@ class _VerifyScreenState extends State<VerifyScreen>
                     controller: _scannerController!,
                     onDetect: _onQRDetected,
                   ),
-                  // Viewfinder frame drawn on top via Stack
+                  // Viewfinder frame
                   Container(
                     width: 200,
                     height: 200,
@@ -336,6 +377,35 @@ class _VerifyScreenState extends State<VerifyScreen>
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
+                  // Torch toggle (top-right)
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: ValueListenableBuilder<MobileScannerState>(
+                      valueListenable: _scannerController!,
+                      builder: (context, state, _) {
+                        final torchState = state.torchState;
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: Colors.black54,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: IconButton(
+                            icon: Icon(
+                              torchState == TorchState.on
+                                  ? Icons.flash_on
+                                  : Icons.flash_off,
+                              color: torchState == TorchState.on
+                                  ? Colors.yellow
+                                  : Colors.white70,
+                            ),
+                            onPressed: _scannerController!.toggleTorch,
+                            tooltip: 'Toggle flashlight',
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -343,9 +413,10 @@ class _VerifyScreenState extends State<VerifyScreen>
           const SizedBox(height: 12),
           SizedBox(
             width: double.infinity,
-            child: OutlinedButton(
+            child: OutlinedButton.icon(
               onPressed: _stopScanner,
-              child: const Text('Stop Scanner'),
+              icon: const Icon(Icons.stop_circle_outlined, size: 16),
+              label: const Text('Stop Scanner'),
             ),
           ),
         ],

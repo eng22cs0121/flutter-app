@@ -7,6 +7,7 @@ import 'package:web3dart/web3dart.dart';
 
 import '../config/constants.dart';
 import '../models/verification_result.dart';
+import 'supabase_service.dart';
 
 /// Mirrors web app's verifyBatchOnBlockchain() and related helpers
 /// from src/lib/blockchain/verification.ts
@@ -352,26 +353,33 @@ class BlockchainService {
 
     addLog('=== DATABASE FALLBACK VERIFICATION ===');
 
-    if (localBatches == null || localBatches.isEmpty) {
-      addLog('❌ No local batch data available');
-      return VerificationResult(
-        isAuthentic: false,
-        status: VerificationStatus.notFound,
-        message:
-            'Batch "${qrData.batchCode}" not found. Please check the batch code.',
-        details: VerificationDetails(batchId: qrData.batchCode),
-        logs: logs,
-        verifiedAt: DateTime.now(),
-      );
+    // Always do a live Supabase query first so newly-added batches are found
+    // even if they were not in the startup cache.
+    Map<String, dynamic> batchJson = {};
+    if (qrData.batchCode != null && qrData.batchCode!.isNotEmpty) {
+      addLog('   Querying Supabase for batch: ${qrData.batchCode}');
+      try {
+        final liveBatch =
+            await SupabaseService().fetchBatchByCode(qrData.batchCode!);
+        if (liveBatch != null) {
+          batchJson = liveBatch.toJson();
+          addLog('✅ Found batch via live Supabase query');
+        }
+      } catch (e) {
+        addLog('   Live query failed ($e), checking startup cache...');
+      }
     }
 
-    // Find batch by id (batch code)
-    final batchJson = localBatches.firstWhere(
-      (b) =>
-          b['id']?.toString().toLowerCase() ==
-          qrData.batchCode?.toLowerCase(),
-      orElse: () => {},
-    );
+    // Fallback to startup cache if live query found nothing
+    if (batchJson.isEmpty && localBatches != null) {
+      batchJson = localBatches.firstWhere(
+        (b) =>
+            b['id']?.toString().toLowerCase() ==
+            qrData.batchCode?.toLowerCase(),
+        orElse: () => {},
+      );
+      if (batchJson.isNotEmpty) addLog('✅ Found batch in startup cache');
+    }
 
     if (batchJson.isEmpty) {
       addLog('❌ Batch "${qrData.batchCode}" not found in database');

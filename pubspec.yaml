@@ -28,6 +28,10 @@ dependencies:
   # Local Storage (scan history)
   shared_preferences: ^2.2.3
 
+  # Map (supply chain route)
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.1
+
   # Utilities
   intl: ^0.19.0
   url_launcher: ^6.3.0
