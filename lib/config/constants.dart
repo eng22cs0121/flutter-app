@@ -4,13 +4,13 @@ class AppConstants {
   AppConstants._();
 
   // ── Supabase ────────────────────────────────────────────────────────
-  static const String supabaseUrl = 'https://idmmiqypcjxejoyyhahj.supabase.co';
+  // TODO: Replace these with your own project values before deploying.
+  // Get them from: Supabase Dashboard → Settings → API
+  static const String supabaseUrl = 'https://YOUR_PROJECT_ID.supabase.co';
 
-  /// Supabase anon key – safe to include in client apps (protected by RLS).
-  static const String supabaseAnonKey =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'
-      '.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlkbW1pcXlwY2p4ZWpveXloYWhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg3NDg5MjcsImV4cCI6MjA4NDMyNDkyN30'
-      '.iPFq3WbfJRV9AFPchQ-iTAS10rKf2MpfpZCOkUAqkcY';
+  /// Supabase anon key – designed to be in client apps (protected by RLS).
+  /// Replace with your own key from Supabase Dashboard → Settings → API → anon/public
+  static const String supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY';
 
   // ── Blockchain ──────────────────────────────────────────────────────
   static const String contractAddress =

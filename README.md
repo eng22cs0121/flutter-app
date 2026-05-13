@@ -1,162 +1,187 @@
-# MediTrustChain – Patient Flutter App
+<div align="center">
 
-A native Android app that replicates the Patient Web Page functionality of MediTrustChain, allowing patients to verify medicine authenticity via QR code scanning and blockchain verification.
+# 💊 MediTrustChain — Patient App
+
+### *Verify Medicine Authenticity with Blockchain*
+
+[![Flutter](https://img.shields.io/badge/Flutter-3.22+-02569B?style=for-the-badge&logo=flutter&logoColor=white)](https://flutter.dev/)
+[![Dart](https://img.shields.io/badge/Dart-3.4+-0175C2?style=for-the-badge&logo=dart&logoColor=white)](https://dart.dev/)
+[![Android](https://img.shields.io/badge/Android-5.0+-3DDC84?style=for-the-badge&logo=android&logoColor=white)](https://developer.android.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-Flutter-3ECF8E?style=for-the-badge&logo=supabase)](https://supabase.com/)
+[![Ethereum](https://img.shields.io/badge/Ethereum-Sepolia-627EEA?style=for-the-badge&logo=ethereum)](https://sepolia.etherscan.io/)
+
+**Part of the MediTrustChain Final Year Project** — A Flutter patient app that lets anyone scan or enter a batch ID to instantly verify whether a medicine is genuine, traceable on the blockchain, and not expired.
+
+[📦 Download APK](#-download-apk) · [🚀 Build Locally](#️-build-locally) · [🔗 Main Project](https://github.com/eng22cs0121/FINAL-YEAR-PROJECT)
+
+</div>
 
 ---
 
-## Features
+## ✨ Features
 
-| Feature | Details |
-|---------|---------|
-| QR Code Scanner | Real-time camera scanning using device back camera |
-| Manual Entry | Enter batch code (e.g. `BCH-001`) manually |
-| Blockchain Verification | Queries Sepolia Ethereum testnet via JSON-RPC |
-| Supabase Fallback | Falls back to Supabase DB if blockchain is unavailable |
-| Scan History | Persists last 50 verifications locally on device |
-| Status Display | GENUINE / TAMPERED / EXPIRED / RECALLED / NOT APPROVED / NOT FOUND |
-| Supply Chain Details | Full batch info: drug name, manufacturer, dates, holder, location |
-| Dark Theme | Matches the web app's design system |
+| Feature | Description |
+|---------|-------------|
+| 🔍 **Manual Verify** | Type a batch ID (e.g. `BCH-0010`) to check authenticity |
+| 📷 **QR Code Scan** | Use camera to scan batch QR codes instantly |
+| ⛓️ **Blockchain Proof** | Reads directly from Ethereum Sepolia smart contract |
+| 🗺️ **Supply Chain Trail** | Shows every step — Manufacturer → Regulator → Logistics → Pharmacy |
+| 📋 **Scan History** | Locally stores your last 50 verifications |
+| 🌙 **Dark Theme** | Material 3 dark theme with teal accent |
+| ⚡ **Offline Fallback** | Falls back to Supabase if blockchain is unavailable |
 
 ---
 
-## Getting the APK (No Setup Required)
+## 🔄 Verification Flow
 
-### Option A — GitHub Actions (Recommended)
-
-1. Push this repository to GitHub
-2. GitHub Actions automatically builds the APK on every push to `main`/`master`
-3. Download the APK from one of two places:
-
-**Permanent Release link** (created automatically):
 ```
-https://github.com/YOUR_USERNAME/YOUR_REPO/releases/latest
+ Patient opens app
+        │
+        ▼
+ Enter Batch ID / Scan QR
+        │
+        ▼
+ ┌──────────────────────┐
+ │  Read Smart Contract │  ◄── Ethereum Sepolia RPC
+ │  (Primary source)    │
+ └──────────┬───────────┘
+            │  Success?
+      ┌─────┴──────┐
+     YES           NO
+      │             │
+      ▼             ▼
+ Show on-chain   Fallback to
+ verified data   Supabase DB
+      │             │
+      └──────┬───────┘
+             ▼
+     ┌───────────────┐
+     │ Authenticity  │
+     │    Result     │
+     ├───────────────┤
+     │ ✅ GENUINE    │  Drug name, manufacturer, expiry,
+     │ ❌ COUNTERFEIT│  supply chain history, blockchain tx
+     │ ⚠️ EXPIRED    │
+     └───────────────┘
 ```
 
-**Workflow artifact** (90-day retention):
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| **Framework** | Flutter 3.22 |
+| **Language** | Dart 3.4 |
+| **Blockchain** | `web3dart` — direct RPC calls to Sepolia |
+| **Database** | `supabase_flutter` — fallback queries |
+| **QR Scanning** | `mobile_scanner` |
+| **Local Storage** | `shared_preferences` — scan history |
+| **UI** | Material 3, Dark theme, Teal accent |
+| **Min SDK** | Android 5.0 (API 21) |
+
+---
+
+## 📦 Download APK
+
+Download the latest pre-built APK from:
+
 ```
-https://github.com/YOUR_USERNAME/YOUR_REPO/actions
-→ Click the latest "Build Android APK" run
-→ Scroll to "Artifacts" section
-→ Download "MediTrust-Patient-APK"
+https://github.com/eng22cs0121/flutter-app/releases/latest
 ```
 
-### Option B — Build Locally
+---
 
-#### Prerequisites
-- Flutter SDK 3.22+ → https://docs.flutter.dev/get-started/install
+## 🏗️ Build Locally
+
+### Prerequisites
+
+- [Flutter SDK 3.22+](https://docs.flutter.dev/get-started/install)
 - Android Studio / SDK (API 21+)
 - Java 17
 
-#### Steps
-```bash
-# 1. Navigate to this folder
-cd FLUTTER-APP
+### Steps
 
-# 2. Install dependencies
+```bash
+# 1. Clone
+git clone https://github.com/eng22cs0121/flutter-app.git
+cd flutter-app
+
+# 2. Get dependencies
 flutter pub get
 
-# 3. Build release APK
+# 3. Run on connected device
+flutter run
+
+# 4. Build release APK
 flutter build apk --release
-
-# 4. Find the APK at:
-#    build/app/outputs/flutter-apk/app-release.apk
+# APK: build/app/outputs/flutter-apk/app-release.apk
 ```
 
 ---
 
-## Installing the APK on Android
+## ⚙️ Configuration
 
-1. **Enable Unknown Sources**: Go to `Settings → Security → Install unknown apps` and enable for your browser/file manager
-2. **Download** the APK file to your phone
-3. **Open** the APK file — Android will prompt you to install
-4. **Tap Install** and wait for installation to complete
-5. Open **MediTrustChain** from your app drawer
+Edit [`lib/config/constants.dart`](lib/config/constants.dart):
 
-> Minimum requirement: Android 5.0 (API 21)
-
----
-
-## Project Structure
-
-```
-FLUTTER-APP/
-├── .github/workflows/build-apk.yml    # CI/CD – auto-build APK on push
-├── android/                            # Android project files
-├── assets/images/                      # App assets
-└── lib/
-    ├── main.dart                       # App entry point + theme
-    ├── config/
-    │   └── constants.dart              # Supabase URL, contract address, etc.
-    ├── models/
-    │   ├── batch.dart                  # Batch & history data models
-    │   └── verification_result.dart    # Verification result types
-    ├── services/
-    │   ├── blockchain_service.dart     # Ethereum RPC + contract calls
-    │   ├── supabase_service.dart       # Supabase queries (fallback)
-    │   └── scan_history_service.dart   # Local scan history (SharedPrefs)
-    ├── screens/
-    │   ├── main_screen.dart            # Bottom nav container
-    │   ├── verify_screen.dart          # QR scan + manual verify
-    │   ├── history_screen.dart         # Past scans list
-    │   └── about_screen.dart           # App info + how it works
-    └── widgets/
-        └── verification_result_card.dart  # Result display widget
+```dart
+class AppConstants {
+  static const String supabaseUrl = 'https://YOUR_PROJECT_ID.supabase.co';
+  static const String supabaseAnonKey = 'YOUR_SUPABASE_ANON_KEY';
+  static const String contractAddress = '0x...your_contract_address';
+  static const String rpcUrl = 'https://eth-sepolia.g.alchemy.com/v2/demo';
+}
 ```
 
 ---
 
-## Configuration
+## 📁 Project Structure
 
-All configuration is in `lib/config/constants.dart`:
-
-| Constant | Value | Description |
-|----------|-------|-------------|
-| `supabaseUrl` | `https://idmmiqypcjxejoyyhahj.supabase.co` | Supabase project URL |
-| `supabaseAnonKey` | `eyJ...` | Supabase anonymous key (safe to expose) |
-| `contractAddress` | `0x1E60...` | MediTrustChainV2 contract on Sepolia |
-| `rpcUrl` | `https://eth-sepolia.g.alchemy.com/v2/demo` | Sepolia JSON-RPC endpoint |
-
-> **Production Note**: Replace the Alchemy `demo` key with a real API key from https://alchemy.com for reliable blockchain access.
-
----
-
-## Verification Logic
-
-The app mirrors the web app's `verifyBatchOnBlockchain()` function exactly:
-
-1. **Parse QR code** — JSON payload or plain batch code string
-2. **Fetch batch ID** from contract via `getBatchIdByCode(batchCode)`
-3. **Get full batch data** via `getBatchFull(batchId)` — returns BatchCore + BatchState structs
-4. **Hash comparison** — if QR contains `dataHash`, compare with on-chain `BatchCore.dataHash`
-5. **Contract verification** — call `verifyBatchWithHash(batchId, hash)` which returns `(isGenuine, status)`
-6. **Return result** — GENUINE / TAMPERED / EXPIRED / RECALLED / NOT_APPROVED
-7. **Fallback** — if blockchain unavailable, query Supabase `batches` table
+```
+flutter-app/
+├── lib/
+│   ├── main.dart                        # App entry + dark theme
+│   ├── config/
+│   │   └── constants.dart               # Supabase URL, contract, RPC config
+│   ├── models/
+│   │   ├── batch.dart                   # Batch & BatchHistory data models
+│   │   └── verification_result.dart     # Verification result types
+│   ├── services/
+│   │   ├── blockchain_service.dart      # Ethereum RPC + ABI calls
+│   │   ├── supabase_service.dart        # Supabase DB fallback queries
+│   │   └── scan_history_service.dart    # SharedPrefs scan history
+│   ├── screens/
+│   │   ├── main_screen.dart             # Bottom nav container
+│   │   ├── verify_screen.dart           # Main verify + QR scan screen
+│   │   ├── history_screen.dart          # Past scans list
+│   │   └── about_screen.dart            # App info & how it works
+│   └── widgets/
+│       └── verification_result_card.dart # Verification result UI card
+└── android/                             # Android build files
+```
 
 ---
 
-## API Integration
+## 🔗 Smart Contract
 
-### Smart Contract (Sepolia)
-- `getBatchIdByCode(string batchCode) → uint256`
-- `getBatchFull(uint256 batchId) → (BatchCore, BatchState)`
-- `verifyBatchWithHash(uint256 batchId, bytes32 hash) → (bool, string)`
-
-### Supabase Tables (Read-Only)
-- `batches` — batch data including status, expiry, manufacturer
-- `batch_history` — supply chain journey events
+| Field | Value |
+|-------|-------|
+| Network | Ethereum Sepolia Testnet |
+| Address | `0x1E60556dE1625bD468eCe9e45a421aFa4bb1F73D` |
+| Explorer | [View on Etherscan](https://sepolia.etherscan.io/address/0x1E60556dE1625bD468eCe9e45a421aFa4bb1F73D) |
 
 ---
 
-## Dependencies
+## 🧪 Test Batch IDs
 
-| Package | Purpose |
-|---------|---------|
-| `mobile_scanner` | QR code / barcode scanning |
-| `web3dart` | Ethereum JSON-RPC + ABI encoding |
-| `supabase_flutter` | Supabase client |
-| `shared_preferences` | Local scan history persistence |
-| `google_fonts` | Inter font (matches web design) |
-| `url_launcher` | Open blockchain explorer links |
-| `intl` | Date formatting |
-| `uuid` | Unique IDs for history entries |
-| `convert` | Hex encoding for bytes32 |
+| Batch ID | Drug | Status |
+|----------|------|--------|
+| `BCH-0001` | DOLO-650 | Sold |
+| `BCH-0010` | Imatinib Mesylate | Sold |
+
+---
+
+## 📄 License
+
+MIT License · Part of [MediTrustChain](https://github.com/eng22cs0121/FINAL-YEAR-PROJECT) · Final Year B.E. CSE 2026
+

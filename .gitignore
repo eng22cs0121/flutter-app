@@ -41,5 +41,9 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Gradle build cache — never commit
+android/.gradle/
+android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
+
 # Local properties
 android/local.properties
